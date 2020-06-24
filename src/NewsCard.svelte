@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  // import searchNews from './SearchHeader.svelte';
+  import Card from "./Card.svelte";
   let newsSearch;
   let articles = [];
   let request;
@@ -20,7 +20,6 @@
       json = await response.json();
       console.log(json);
       articles = json.articles;
-      console.log(articles);
     })
   );
 
@@ -29,133 +28,23 @@
     response = await fetch(
       `http://newsapi.org/v2/everything?q=${newsStories}&apiKey=24036c93ea52469a83075629f87a04b1`
     );
-    console.log(json);
     json = await response.json();
-    console.log("before articles", json);
     articles = json.articles;
   };
 </script>
 
-<style>
-  #cardContainer {
-    display: flex;
-    padding: 0.75em;
-    height: 100vh;
-    max-width: 100%;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-  }
-  .newsCardWrapper {
-    height: 300px;
-    min-height: 35vh;
-    max-height: 35vh;
-    width: 100%;
-    min-width: 350px;
-    max-width: 350px;
-    margin: 1em;
-  }
-  .newsCard {
-    height: 100%;
-  }
-  .newsCard,
-  .newsCard_header,
-  .newsCard_content,
-  #cardContainer {
-    display: flex;
-  }
-  .newsCard_header {
-    border: solid 1px lightgrey;
-    border-radius: 5px 5px 0px 0px;
-    background: #fff;
-  }
-  .newsCard {
-    height: 100%;
-    flex-flow: column nowrap;
-    max-height: 100%;
-  }
-  .newsCard_header,
-  .newsCard_content {
-    padding: 1em;
-    justify-content: center;
-    align-items: center;
-  }
-  .newsCard_content {
-    height: 81%;
-    padding: 0;
-  }
-  img {
-    object-fit: fill;
-    border-radius: 0px 0px 5px 5px;
-  }
-  .newsCard_content > a,
-  a > img {
-    max-height: 100%;
-  }
-
-  .newsCard_header {
-    font-size: 12px;
-    height: 10%;
-  }
-  .searchWrapper,
-  .searchWrapper > label {
-    display: flex;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
-  }
-  h1,
-  h2 {
-    text-align: center;
-    margin: 1em;
-  }
-  #newsSearch {
-    padding: 0.5em;
-    border-radius: 4px;
-    border: solid 1px lightgray;
-    margin-bottom: 1em;
-  }
-  button {
-    padding: 0.5em;
-    width: 5em;
-    border-radius: 4px;
-    border: unset;
-    background: lightblue;
-    transition: background 0.5s ease, color 0.25s ease;
-  }
-  button:hover {
-    background: darkslateblue;
-    color: #fff;
-  }
-</style>
-
 <h1>Search Top Stories</h1>
-<form class="searchWrapper">
-  <label for="newsSearch">
-    <input
-      id="newsSearch"
-      type="text"
-      bind:value={newsStories}
-      placeholder="Coronavirus" />
-  </label>
-  <button type="button" on:click={searchRequest}>Search</button>
-</form>
+<label for="newsSearch">
+  <input
+    id="newsSearch"
+    type="text"
+    bind:value={newsStories}
+    placeholder="Coronavirus" />
+</label>
+<button type="button" on:click={searchRequest}>Search</button>
 <h2>{newsStories} Headlines</h2>
 <section id="cardContainer">
   {#each articles as article}
-    <div class="newsCarWrapper">
-      <article class="newsCard">
-        <header class="newsCard_header">{article.title}</header>
-        <div class="newsCard_content">
-          <a href={article.url}>
-            <img
-              src={article.urlToImage}
-              alt="Link To Story Image: {article.urlToImage}"
-              height="243"
-              width="350" />
-          </a>
-        </div>
-      </article>
-    </div>
+    <Card {article} />
   {/each}
 </section>
