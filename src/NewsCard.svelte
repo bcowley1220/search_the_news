@@ -1,6 +1,5 @@
 <script>
 	import {onMount} from 'svelte';
-	// import searchNews from './SearchHeader.svelte';
 	let newsSearch;
 	let articles = [];
 	let request;
@@ -13,12 +12,12 @@
 		request = async () => {
 			json = null;
 			response = await fetch(
-						`http://newsapi.org/v2/top-headlines?` +
+						`http://cors-anywhere.herokuapp.com/http://newsapi.org/v2/top-headlines?` +
 						'country=us&' +
 						'apiKey=24036c93ea52469a83075629f87a04b1');
 			json = await response.json();
 			console.log(json)
-			articles = json.articles;
+			return articles = json.articles;
 			console.log(articles)
 		}
 	);
@@ -29,7 +28,7 @@
 			console.log(json);
 			json = await response.json();
 			console.log('before articles', json);
-			articles = json.articles;
+			return articles = json.articles;
 		}
 
 
@@ -125,7 +124,7 @@
 <h1>Search Top Stories </h1>
 <form class='searchWrapper'>
 	<label for="newsSearch">
-		<input id='newsSearch' type="text"  bind:value={newsStories} placeholder="Coronavirus">
+		<input id='newsSearch' type="text"  bind:value={newsStories} placeholder="Coronavirus"/>
 	</label>
 	<button type="button" on:click={searchRequest}>Search</button>
 </form>
@@ -133,5 +132,16 @@
 	{newsStories} Headlines
 </h2>
 <section id='cardContainer'>
-
+{#each articles as article}
+	<div class='newsCardWrapper'>
+		<article class='newsCard'>
+			<header class='newsCard_header'>{article.title}</header>
+			<div class='newsCard_content'>
+				<a href='{article.url}'> 
+					<img src='{article.urlToImage}' alt='Link To Story Image: {article.urlToImage}' height='243' width='350' />
+				</a>
+			</div>
+		</article>
+	</div>
+{/each}
 </section>
