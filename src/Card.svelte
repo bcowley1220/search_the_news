@@ -2,7 +2,7 @@
   export let article;
 </script>
 
-<div class="newsCarWrapper">
+<div class="newsCardWrapper">
   <article class="newsCard">
     <header class="newsCard_header">{article.title}</header>
     <div class="newsCard_content">
